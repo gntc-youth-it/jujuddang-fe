@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>가나안입성 + 하트폭죽</title>
+  <style>
+    @font-face {
+      font-family: 'Cafe24Ohsquare';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/Cafe24Ohsquare.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      margin: 0;
+      background: white;
+      overflow: hidden;
+      font-family: 'Cafe24Ohsquare', sans-serif;
+    }
+
+    canvas#canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .text-container {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5vh;
+    }
+
+    .char {
+      font-size: 20vw;
+      font-weight: bold;
+      color: black;
+      opacity: 0;
+      animation: showChar 0.5s forwards;
+      transform: scale(2);
+    }
+
+    @keyframes showChar {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .merged-text, .final-text {
+  position: absolute;
+  left: 50%;
+  font-weight: bold;
+  color: black;
+  opacity: 0;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+}
+
+.merged-text {
+  font-size: 12vw;        /* ✅ 글자 크기 증가 */
+  top: 50%;               /* 기존과 동일 */
+  transition: all 2s ease-in-out;
+}
+
+.final-text {
+  font-size: 13vw;        /* ✅ 더 크게 */
+  top: 50%;               /* ✅ 세로 정중앙 */
+  transition: opacity 2s ease-in-out;
+}
+  </style>
+</head>
+<body>
+  <!-- BGM -->
+  <audio src="bgm.mp3" autoplay loop></audio>
+
+  <!-- 폭죽 캔버스 -->
+  <canvas id="canvas"></canvas>
+
+  <!-- 글자 한 글자씩 세로 등장 -->
+  <div class="text-container" id="textContainer"></div>
+
+  <!-- 합쳐진 텍스트 -->
+  <div class="merged-text" id="mergedText">가나안입성</div>
+
+  <!-- 마지막 텍스트 -->
+  <div class="final-text" id="finalText">바울성전</div>
+
+  <!-- 하트 폭죽 스크립트 -->
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    class HeartParticle {
+      constructor(x, y, angle, color) {
+        this.x = x;
+        this.y = y;
+        this.speed = Math.random() * 5 + 2;
+        this.angle = angle;
+        this.color = color;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.015 + 0.01;
+      }
+
+      update() {
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+        this.alpha -= this.decay;
+      }
+
+      drawHeart(x, y, size) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.bezierCurveTo(x - size, y - size, x - size * 1.5, y + size / 2, x, y + size);
+        ctx.bezierCurveTo(x + size * 1.5, y + size / 2, x + size, y - size, x, y);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        this.drawHeart(0, 0, 10);
+        ctx.restore();
+      }
+    }
+
+    let particles = [];
+
+    function explode(x, y) {
+      const color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+      for (let i = 0; i < 50; i++) {
+        const angle = Math.random() * 2 * Math.PI;
+        particles.push(new HeartParticle(x, y, angle, color));
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      ctx.fillStyle = "rgba(255,255,255,0.1)"; // 흰 배경에서도 잔상 유지
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles = particles.filter(p => p.alpha > 0);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+    }
+
+    setInterval(() => {
+      explode(Math.random() * canvas.width, Math.random() * canvas.height * 0.6);
+    }, 800);
+
+    animate();
+  </script>
+
+  <!-- 텍스트 애니메이션 -->
+  <script>
+    const chars = "가나안입성".split("");
+    const textContainer = document.getElementById("textContainer");
+    const mergedText = document.getElementById("mergedText");
+    const finalText = document.getElementById("finalText");
+
+    chars.forEach((char, i) => {
+      setTimeout(() => {
+        const span = document.createElement("span");
+        span.className = "char";
+        span.textContent = char;
+        textContainer.appendChild(span);
+      }, i * 700);
+    });
+
+    const totalTime = chars.length * 700 + 1000;
+
+    setTimeout(() => {
+      textContainer.style.display = "none";
+      mergedText.style.opacity = 1;
+    }, totalTime);
+
+    setTimeout(() => {
+      mergedText.style.top = "10%";
+    }, totalTime + 1500);
+
+    setTimeout(() => {
+      finalText.style.opacity = 1;
+    }, totalTime + 3000);
+  </script>
+</body>
+</html>
