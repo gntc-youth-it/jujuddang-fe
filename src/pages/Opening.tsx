@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTeam } from '../hooks/useTeam';
 
 const Opening: React.FC = () => {
@@ -7,8 +7,19 @@ const Opening: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [nextSite, setNextSite] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [infoOpen, setInfoOpen] = useState(false);
-  const [infoMessage, setInfoMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
+
+  const showToast = (message: string) => {
+    setToastMessage(message);
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current);
+    }
+    toastTimerRef.current = window.setTimeout(() => {
+      setToastMessage(null);
+      toastTimerRef.current = null;
+    }, 2500);
+  };
   
   const siteLabelMap: Record<string, string> = {
     OPENING: '오프닝장소',
@@ -25,11 +36,11 @@ const Opening: React.FC = () => {
   const handleSubmit = async () => {
     const trimmed = answer.trim();
     if (trimmed !== '122') {
-      alert('정답이 아닙니다. 다시 입력해주세요.');
+      showToast('정답이 아닙니다. 다시 입력해주세요.');
       return;
     }
     if (!hasTeam || teamNumber == null) {
-      alert('팀 번호를 먼저 설정해주세요.');
+      showToast('팀 번호를 먼저 설정해주세요.');
       return;
     }
 
@@ -60,8 +71,7 @@ const Opening: React.FC = () => {
 
       const data: ScanResponse = await response.json();
       if (!data.correct) {
-        setInfoMessage('현재 올바른 단계가 아닙니다! 적절한 장소로 이동해주세요');
-        setInfoOpen(true);
+        showToast('현재 올바른 단계가 아닙니다! 적절한 장소로 이동해주세요');
         return;
       }
       setNextSite(data.nextSite || null);
@@ -86,31 +96,21 @@ const Opening: React.FC = () => {
     <div className="answer-page w-100 h-100">
       <div className="container w-100 h-100">
         <h1>주님이 주신 땅으로</h1>
-        {infoOpen && (
+        {toastMessage && (
           <div style={{
-            margin: '0 0 1rem 0',
-            padding: '0.75rem 1rem',
-            background: 'rgba(75,0,0,0.08)',
-            border: '1px solid rgba(75,0,0,0.25)',
-            borderRadius: 12,
-            color: '#4b0000',
+            position: 'fixed',
+            top: '70px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(75,0,0,0.95)',
+            color: '#fff',
+            padding: '0.6rem 1rem',
+            borderRadius: 10,
+            zIndex: 9999,
+            boxShadow: '0 6px 18px rgba(75,0,0,0.35)',
             fontWeight: 600
           }}>
-            {infoMessage}
-            <button
-              onClick={() => setInfoOpen(false)}
-              style={{
-                marginLeft: 12,
-                padding: '0.25rem 0.75rem',
-                border: 'none',
-                borderRadius: 8,
-                background: '#4b0000',
-                color: '#fff',
-                cursor: 'pointer'
-              }}
-            >
-              닫기
-            </button>
+            {toastMessage}
           </div>
         )}
         {resolvedSiteLabel ? (
