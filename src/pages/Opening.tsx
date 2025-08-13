@@ -7,6 +7,18 @@ const Opening: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [nextSite, setNextSite] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
+  
+  const siteLabelMap: Record<string, string> = {
+    OPENING: '오프닝장소',
+    BAPTISTRY: '침례장',
+    FIELD: '대운동장',
+    MAIN_3F: '본관 3층 숙소',
+    MAIN_4F: '본관 4층 숙소',
+    BETHLEHEM: '베들레헴 성전',
+    JERUSALEM: '예루살렘 성전',
+  };
+  
+  const resolvedSiteLabel = nextSite ? (siteLabelMap as any)[nextSite] ?? null : null;
 
   const handleSubmit = async () => {
     const trimmed = answer.trim();
@@ -71,29 +83,33 @@ const Opening: React.FC = () => {
     <div className="answer-page w-100 h-100">
       <div className="container w-100 h-100">
         <h1>주님이 주신 땅으로</h1>
-        <p>답을 입력하세요</p>
-        <div className="input-answer">
-          <textarea 
-            className="answer-box"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            placeholder="여기에 답을 입력하세요..."
-          ></textarea>
-          <button 
-            className="submit-button"
-            onClick={handleSubmit}
-            disabled={submitting}
-          >
-            {submitting ? '확인 중...' : '확인'}
-          </button>
-        </div>
-        {apiError && (
-          <p style={{ color: '#b00020', marginTop: '1rem' }}>{apiError}</p>
-        )}
-        {nextSite && (
-          <p style={{ marginTop: '1rem', color: '#4b0000', fontWeight: 700 }}>
-            다음 장소: {nextSite}
-          </p>
+        {resolvedSiteLabel ? (
+          <>
+            <h1>{resolvedSiteLabel}</h1>
+            <p style={{ marginTop: '1rem' }}>스텝에게 이 화면을 보여준 후 이동하세요</p>
+          </>
+        ) : (
+          <>
+            <p>답을 입력하세요</p>
+            <div className="input-answer">
+              <textarea 
+                className="answer-box"
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                placeholder="여기에 답을 입력하세요..."
+              ></textarea>
+              <button 
+                className="submit-button"
+                onClick={handleSubmit}
+                disabled={submitting}
+              >
+                {submitting ? '확인 중...' : '확인'}
+              </button>
+            </div>
+            {apiError && (
+              <p style={{ color: '#b00020', marginTop: '1rem' }}>{apiError}</p>
+            )}
+          </>
         )}
         <div className="copyright">
           <span>gntc-youth-it</span>
