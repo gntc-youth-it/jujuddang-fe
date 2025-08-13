@@ -1,47 +1,36 @@
+@font-face {
+  font-family: 'Dokrip';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Dokrip.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .App {
   text-align: center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: 'Dokrip', sans-serif;
 }
 
 .navigation {
-  background-color: #282c34;
-  padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: #1a0000;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 2rem;
-  padding-right: 2rem;
 }
 
-.navigation ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-}
+/* 네비게이션 링크 스타일 제거 */
 
-.navigation li {
-  margin: 0;
-}
-
-.navigation a {
+.event-title h1 {
   color: white;
-  text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.navigation a:hover {
-  background-color: #61dafb;
-  color: #282c34;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: 'Dokrip', sans-serif;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .team-info {
@@ -57,25 +46,27 @@
 }
 
 .change-team-btn {
-  background-color: #61dafb;
-  color: #282c34;
+  background: linear-gradient(135deg, #6d0000 0%, #4b0000 100%);
+  color: #ffffff;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 10px rgba(75, 0, 0, 0.25);
 }
 
 .change-team-btn:hover {
-  background-color: #4fa8c7;
+  background: linear-gradient(135deg, #4b0000 0%, #320000 100%);
   transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(75, 0, 0, 0.35);
 }
 
 .main-content {
   flex: 1;
-  padding: 2rem;
+  padding: 0;
 }
 
 /* 각 페이지별 스타일 */
@@ -86,6 +77,118 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+/* Opening 페이지 답변 입력 폼 스타일 */
+.answer-page {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 100vh;
+  background-image: url('./assets/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+  padding-top: 2vh;
+}
+
+/* 어두운 오버레이 제거 */
+
+.answer-page .container {
+  text-align: center;
+  background: transparent;
+  padding: 1.5rem 2rem 2.5rem;
+  max-width: 90%;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.answer-page h1 {
+  color: #4b0000;
+  margin-bottom: 6rem;
+  font-size: 4rem;
+  font-weight: bold;
+  font-family: 'Dokrip', sans-serif;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.answer-page p {
+  color: rgba(75, 0, 0, 0.6);
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-family: 'Dokrip', sans-serif;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+}
+
+.input-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.answer-box {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: none;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-family: 'Dokrip', sans-serif;
+  resize: vertical;
+  transition: all 0.3s ease;
+  background: #ccc;
+  box-sizing: border-box;
+}
+
+.answer-box:focus {
+  outline: none;
+  box-shadow: none;
+  background: #ccc;
+}
+
+.submit-button {
+  background: linear-gradient(135deg, #6d0000 0%, #4b0000 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: 'Dokrip', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: center;
+  min-width: 120px;
+  box-shadow: 0 4px 15px rgba(75, 0, 0, 0.3);
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(75, 0, 0, 0.4);
+  background: linear-gradient(135deg, #4b0000 0%, #320000 100%);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+}
+
+.copyright {
+  margin-top: 3rem;
+  text-align: center;
+  opacity: 0.3;
+}
+
+.copyright span {
+  color: #2c3e50;
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 
 .opening-page h1,
@@ -132,16 +235,53 @@
   .navigation {
     flex-direction: column;
     gap: 1rem;
+    justify-content: center;
     padding: 1rem;
   }
+
+  .event-title h1 {
+    font-size: 1.3rem;
+  }
   
-  .navigation ul {
-    flex-wrap: wrap;
-    gap: 1rem;
+  /* 모바일에서 페이지 타이틀 더 크게 */
+  .answer-page h1 {
+    font-size: clamp(2.4rem, 11vw, 3.6rem);
   }
   
   .team-info {
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  /* Opening 페이지 모바일 반응형 */
+  .answer-page .container {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+    border-radius: 15px;
+    max-width: 95%;
+  }
+
+  .answer-page h1 {
+    font-size: 1.8rem;
+  }
+
+  .answer-page p {
+    font-size: 1rem;
+  }
+
+  .answer-box {
+    min-height: 100px;
+    padding: 0.8rem;
+    font-size: 16px; /* 모바일에서 자동 확대 방지 */
+  }
+
+  .submit-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    min-width: 100px;
+  }
+
+  .answer-page {
+    background-attachment: scroll; /* 모바일에서 fixed 배경 제거 */
   }
 }

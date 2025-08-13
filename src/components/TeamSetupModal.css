@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,24 +12,26 @@
 }
 
 .modal-content {
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px rgba(75, 0, 0, 0.15);
   max-width: 500px;
   width: 90%;
   text-align: center;
+  font-family: 'Dokrip', sans-serif;
 }
 
 .modal-content h2 {
   margin: 0 0 1rem 0;
-  color: #333;
-  font-size: 1.5rem;
+  color: #4b0000;
+  font-size: 1.7rem;
+  font-weight: 700;
 }
 
 .modal-content p {
   margin: 0 0 1.5rem 0;
-  color: #666;
+  color: rgba(75, 0, 0, 0.6);
   font-size: 1rem;
 }
 
@@ -43,24 +45,26 @@
 
 .team-input-label {
   font-size: 1.1rem;
-  color: #333;
+  color: #4b0000;
   font-weight: 500;
 }
 
 .team-input {
   width: 80px;
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: none;
   border-radius: 8px;
   font-size: 1.2rem;
   text-align: center;
-  transition: border-color 0.2s ease;
+  transition: background-color 0.2s ease;
+  background: #ccc;
+  font-family: 'Dokrip', sans-serif;
 }
 
 .team-input:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  box-shadow: none;
+  background: #ccc;
 }
 
 .team-input::-webkit-inner-spin-button,
@@ -70,7 +74,7 @@
 
 .team-suffix {
   font-size: 1.1rem;
-  color: #333;
+  color: #4b0000;
   font-weight: 500;
 }
 
@@ -97,24 +101,27 @@
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: 'Dokrip', sans-serif;
 }
 
 .confirm-btn {
-  background-color: #007bff;
-  color: white;
+  background: linear-gradient(135deg, #6d0000 0%, #4b0000 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(75, 0, 0, 0.25);
 }
 
 .confirm-btn:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #4b0000 0%, #320000 100%);
+  box-shadow: 0 6px 16px rgba(75, 0, 0, 0.35);
 }
 
 .cancel-btn {
-  background-color: #6c757d;
-  color: white;
+  background-color: #bbb;
+  color: #2c2c2c;
 }
 
 .cancel-btn:hover {
-  background-color: #545b62;
+  background-color: #a6a6a6;
 }
 
 @media (max-width: 600px) {

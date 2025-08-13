@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 // 페이지 컴포넌트들 import
@@ -38,12 +38,9 @@ function App() {
     <Router>
       <div className="App">
         <nav className="navigation">
-          <ul>
-            <li><Link to="/opening">Opening</Link></li>
-            <li><Link to="/jericho">Jericho</Link></li>
-            <li><Link to="/red-sea">Red Sea</Link></li>
-            <li><Link to="/decalogue">Decalogue</Link></li>
-          </ul>
+          <div className="event-title">
+            <h1>주님이 주신 땅으로</h1>
+          </div>
           {currentTeam && (
             <div className="team-info">
               <span>현재 팀: {currentTeam}조</span>
