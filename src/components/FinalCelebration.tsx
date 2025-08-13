@@ -1,35 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const LETTERS = ['가', '나', '안', '입', '성'];
 
 const FinalCelebration: React.FC = () => {
   const [visibleCount, setVisibleCount] = useState(0);
-  
-  const confettiParticles = useMemo(() => {
-    const colors = ['#ffb3b3', '#ffc7a6', '#ffd6a6', '#ff9e9e', '#ffc0cb'];
-    return Array.from({ length: 42 }).map((_, i) => {
-      const left = Math.random() * 100; // 0 ~ 100%
-      const delay = Math.random() * 2.2; // 0 ~ 2.2s
-      const duration = 2.2 + Math.random() * 2.4; // 2.2s ~ 4.6s
-      const width = 6 + Math.random() * 5; // 6 ~ 11px
-      const height = 10 + Math.random() * 8; // 10 ~ 18px
-      const drift = (Math.random() - 0.5) * 80; // -40 ~ 40px
-      const rotate = Math.floor(Math.random() * 360);
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      return { key: i, left, delay, duration, width, height, drift, rotate, color };
-    });
-  }, []);
-
-  const fireworks = useMemo(() => {
-    return Array.from({ length: 6 }).map((_, i) => {
-      const x = 10 + Math.random() * 80; // 10% ~ 90%
-      const y = 10 + Math.random() * 55; // 10% ~ 65%
-      const delay = 0.6 + Math.random() * 2.4; // 0.6s ~ 3s
-      const duration = 1.6 + Math.random() * 1.6; // 1.6s ~ 3.2s
-      const scale = 0.6 + Math.random() * 0.9; // 0.6 ~ 1.5
-      return { key: i, x, y, delay, duration, scale };
-    });
-  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -64,39 +38,11 @@ const FinalCelebration: React.FC = () => {
       </div>
 
       <div className="confetti-container">
-        {confettiParticles.map(p => (
+        {Array.from({ length: 14 }).map((_, i) => (
           <div
-            key={p.key}
+            key={i}
             className="confetti"
-            style={{
-              left: `${p.left}%`,
-              width: `${p.width}px`,
-              height: `${p.height}px`,
-              background: p.color,
-              animationDelay: `${p.delay}s`,
-              animationDuration: `${p.duration}s`,
-              transform: `rotate(${p.rotate}deg)`,
-              // custom variable for horizontal drift
-              // @ts-ignore
-              '--driftX': `${p.drift}px`
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="fireworks-container">
-        {fireworks.map(fw => (
-          <div
-            key={fw.key}
-            className="firework"
-            style={{
-              left: `${fw.x}%`,
-              top: `${fw.y}%`,
-              animationDelay: `${fw.delay}s`,
-              animationDuration: `${fw.duration}s`,
-              // @ts-ignore
-              '--fw-scale': fw.scale
-            }}
+            style={{ left: `${(i + 1) * (100 / 16)}%`, animationDelay: `${(i % 7) * 0.3}s` }}
           />
         ))}
       </div>
