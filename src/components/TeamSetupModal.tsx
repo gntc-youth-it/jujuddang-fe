@@ -8,7 +8,7 @@ interface TeamSetupModalProps {
 }
 
 const TeamSetupModal: React.FC<TeamSetupModalProps> = ({ isOpen, onClose, onTeamSet }) => {
-  const [teamNumber, setTeamNumber] = useState<number>(1);
+  const [teamNumberInput, setTeamNumberInput] = useState<string>('');
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState<string>('');
 
@@ -16,28 +16,38 @@ const TeamSetupModal: React.FC<TeamSetupModalProps> = ({ isOpen, onClose, onTeam
     if (isOpen) {
       setIsVisible(true);
       setError('');
+      // 입력 초기화 (비워두기)
+      setTeamNumberInput('');
     } else {
       setIsVisible(false);
     }
   }, [isOpen]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value)) {
-      setTeamNumber(value);
+    const { value } = e.target;
+    // 빈 값 허용, 숫자만 유지
+    if (value === '') {
+      setTeamNumberInput('');
       setError('');
+      return;
     }
+    setTeamNumberInput(value);
+    setError('');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (teamNumber < 1 || teamNumber > 60) {
+    const parsed = parseInt(teamNumberInput, 10);
+    if (Number.isNaN(parsed)) {
+      setError('조 번호를 입력해주세요.');
+      return;
+    }
+    if (parsed < 1 || parsed > 60) {
       setError('조 번호는 1부터 60까지 입력 가능합니다.');
       return;
     }
-    
-    onTeamSet(teamNumber);
+
+    onTeamSet(parsed);
     onClose();
   };
 
@@ -63,7 +73,7 @@ const TeamSetupModal: React.FC<TeamSetupModalProps> = ({ isOpen, onClose, onTeam
               type="number"
               min="1"
               max="60"
-              value={teamNumber}
+              value={teamNumberInput}
               onChange={handleInputChange}
               className="team-input"
               placeholder="1~60"

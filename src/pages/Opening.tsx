@@ -39,7 +39,9 @@ const Opening: React.FC = () => {
       showToast('정답이 아닙니다. 다시 입력해주세요.');
       return;
     }
-    if (!hasTeam || teamNumber == null) {
+    const storedTeamStr = localStorage.getItem('teamNumber');
+    const payloadTeamNumber = storedTeamStr ? parseInt(storedTeamStr) : NaN;
+    if (Number.isNaN(payloadTeamNumber)) {
       showToast('팀 번호를 먼저 설정해주세요.');
       return;
     }
@@ -52,7 +54,7 @@ const Opening: React.FC = () => {
       const response = await fetch('https://api.gntc-youth.com/api/checkpoint/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ teamNumber, stage: 'OPENING' })
+        body: JSON.stringify({ teamNumber: payloadTeamNumber, stage: 'OPENING' })
       });
 
       if (!response.ok) {
