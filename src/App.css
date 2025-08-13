@@ -33,6 +33,89 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* 완료 화면 스타일 */
+.final-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  margin-top: 2rem;
+}
+
+.canaan-letters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.canaan-letter {
+  opacity: 0.15;
+  transform: translateY(8px) scale(0.9);
+  transition: all 0.35s ease;
+  font-size: 3rem;
+  color: #4b0000;
+  font-family: 'Dokrip', sans-serif;
+}
+
+.canaan-letter.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.final-destination {
+  color: #4b0000;
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: 'Dokrip', sans-serif;
+}
+
+.final-instructions {
+  margin-top: 1rem;
+  color: rgba(75, 0, 0, 0.85);
+  text-align: center;
+  font-family: 'Dokrip', sans-serif;
+}
+
+.confetti-container {
+  pointer-events: none;
+  position: absolute;
+  top: -10px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  top: -12px;
+  width: 8px;
+  height: 14px;
+  background: #ffb3b3;
+  opacity: 0.9;
+  transform: rotate(15deg);
+  animation: confetti-fall 3s linear infinite;
+}
+
+.confetti:nth-child(3n) { background: #ffc7a6; }
+.confetti:nth-child(4n) { background: #ffd6a6; }
+.confetti:nth-child(5n) { background: #ff9e9e; }
+.confetti:nth-child(6n) { background: #ffc0cb; }
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translateY(45vh) rotate(120deg); }
+  100% { transform: translateY(90vh) rotate(360deg); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  .canaan-letter { font-size: 2.4rem; }
+  .final-destination { font-size: 1.6rem; }
+}
+
 .team-info {
   display: flex;
   align-items: center;

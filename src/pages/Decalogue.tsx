@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTeam } from '../hooks/useTeam';
+import FinalCelebration from '../components/FinalCelebration';
 
 const Decalogue: React.FC = () => {
   const { isLoading, hasTeam } = useTeam();
@@ -74,7 +75,11 @@ const Decalogue: React.FC = () => {
           showToast('현재 올바른 단계가 아닙니다! 적절한 장소로 이동해주세요');
           return;
         }
-        setNextSite(data.nextSite || null);
+        if (data.finished) {
+          setNextSite('FINISHED');
+        } else {
+          setNextSite(data.nextSite || null);
+        }
       } catch (err: any) {
         setApiError(err?.message ?? '알 수 없는 오류가 발생했습니다.');
       } finally {
@@ -121,7 +126,9 @@ const Decalogue: React.FC = () => {
           </div>
         )}
         <h1>십계명</h1>
-        {resolvedSiteLabel ? (
+        {nextSite === 'FINISHED' ? (
+          <FinalCelebration />
+        ) : resolvedSiteLabel ? (
           <>
             <h1>{resolvedSiteLabel}</h1>
             <p style={{ marginTop: '1rem' }}>스텝에게 이 화면을 보여준 후 이동하세요</p>
