@@ -107,7 +107,6 @@ const RedSea: React.FC = () => {
   return (
     <div className="answer-page w-100 h-100">
       <div className="container w-100 h-100">
-        <h1>주님이 주신 땅으로</h1>
         {toastMessage && (
           <div style={{
             position: 'fixed',
@@ -125,11 +124,12 @@ const RedSea: React.FC = () => {
             {toastMessage}
           </div>
         )}
-        <h1>홍해</h1>
         {nextSite === 'FINISHED' ? (
           <FinalCelebration />
         ) : resolvedSiteLabel ? (
           <>
+            <h1>주님이 주신 땅으로</h1>
+            <h1>홍해</h1>
             <h1>{resolvedSiteLabel}</h1>
             <p style={{ marginTop: '1rem' }}>스텝에게 이 화면을 보여준 후 이동하세요</p>
           </>

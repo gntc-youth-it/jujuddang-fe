@@ -102,7 +102,6 @@ const Opening: React.FC = () => {
   return (
     <div className="answer-page w-100 h-100">
       <div className="container w-100 h-100">
-        <h1>주님이 주신 땅으로</h1>
         {toastMessage && (
           <div style={{
             position: 'fixed',
@@ -126,11 +125,13 @@ const Opening: React.FC = () => {
           </>
         ) : resolvedSiteLabel ? (
           <>
+            <h1>주님이 주신 땅으로</h1>
             <h1>{resolvedSiteLabel}</h1>
             <p style={{ marginTop: '1rem' }}>스텝에게 이 화면을 보여준 후 이동하세요</p>
           </>
         ) : (
           <>
+            <h1>주님이 주신 땅으로</h1>
             <p>답을 입력하세요</p>
             <div className="input-answer">
               <textarea 
