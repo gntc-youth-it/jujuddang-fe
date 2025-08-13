@@ -7,6 +7,8 @@ const Opening: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [nextSite, setNextSite] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [infoOpen, setInfoOpen] = useState(false);
+  const [infoMessage, setInfoMessage] = useState('');
   
   const siteLabelMap: Record<string, string> = {
     OPENING: '오프닝장소',
@@ -57,11 +59,12 @@ const Opening: React.FC = () => {
       };
 
       const data: ScanResponse = await response.json();
-      setNextSite(data.nextSite || null);
       if (!data.correct) {
-        // 서버 상의 정답 체크가 틀린 경우도 안내
-        alert('정답이 올바르지 않습니다. 다시 시도해주세요.');
+        setInfoMessage('현재 올바른 단계가 아닙니다! 적절한 장소로 이동해주세요');
+        setInfoOpen(true);
+        return;
       }
+      setNextSite(data.nextSite || null);
     } catch (err: any) {
       setApiError(err?.message ?? '알 수 없는 오류가 발생했습니다.');
     } finally {
@@ -83,6 +86,33 @@ const Opening: React.FC = () => {
     <div className="answer-page w-100 h-100">
       <div className="container w-100 h-100">
         <h1>주님이 주신 땅으로</h1>
+        {infoOpen && (
+          <div style={{
+            margin: '0 0 1rem 0',
+            padding: '0.75rem 1rem',
+            background: 'rgba(75,0,0,0.08)',
+            border: '1px solid rgba(75,0,0,0.25)',
+            borderRadius: 12,
+            color: '#4b0000',
+            fontWeight: 600
+          }}>
+            {infoMessage}
+            <button
+              onClick={() => setInfoOpen(false)}
+              style={{
+                marginLeft: 12,
+                padding: '0.25rem 0.75rem',
+                border: 'none',
+                borderRadius: 8,
+                background: '#4b0000',
+                color: '#fff',
+                cursor: 'pointer'
+              }}
+            >
+              닫기
+            </button>
+          </div>
+        )}
         {resolvedSiteLabel ? (
           <>
             <h1>{resolvedSiteLabel}</h1>
