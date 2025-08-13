@@ -10,23 +10,32 @@ const FinalCelebration: React.FC = () => {
   class HeartParticle {
     x: number;
     y: number;
-    speed: number;
-    angle: number;
+    vx: number;
+    vy: number;
     color: string;
     alpha: number;
     decay: number;
+    rotation: number;
+    gravity: number;
+    friction: number;
     constructor(x: number, y: number, angle: number, color: string) {
       this.x = x;
       this.y = y;
-      this.speed = Math.random() * 5 + 2;
-      this.angle = angle;
+      const speed = Math.random() * 3 + 1.2; // slower initial speed
+      this.vx = Math.cos(angle) * speed;
+      this.vy = Math.sin(angle) * speed;
       this.color = color;
       this.alpha = 1;
-      this.decay = Math.random() * 0.015 + 0.01;
+      this.decay = Math.random() * 0.012 + 0.008;
+      this.rotation = angle; // static rotation for heart orientation
+      this.gravity = 0.05; // gentle gravity
+      this.friction = 0.985; // slight air resistance
     }
     update() {
-      this.x += Math.cos(this.angle) * this.speed;
-      this.y += Math.sin(this.angle) * this.speed;
+      this.vx *= this.friction;
+      this.vy = this.vy * this.friction + this.gravity;
+      this.x += this.vx;
+      this.y += this.vy;
       this.alpha -= this.decay;
     }
     drawHeart(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
@@ -40,7 +49,7 @@ const FinalCelebration: React.FC = () => {
     draw(ctx: CanvasRenderingContext2D) {
       ctx.save();
       ctx.translate(this.x, this.y);
-      ctx.rotate(this.angle);
+      ctx.rotate(this.rotation);
       ctx.globalAlpha = this.alpha;
       ctx.fillStyle = this.color;
       this.drawHeart(ctx, 0, 0, 10);
