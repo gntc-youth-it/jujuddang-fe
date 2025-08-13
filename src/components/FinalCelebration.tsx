@@ -6,37 +6,62 @@ const FinalCelebration: React.FC = () => {
   const [visibleCount, setVisibleCount] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const particlesRef = useRef<HeartParticle[]>([]);
+  const lastTimeRef = useRef<number | null>(null);
 
   class HeartParticle {
     x: number;
     y: number;
-    vx: number;
-    vy: number;
+    vx: number; // px/sec
+    vy: number; // px/sec
     color: string;
     alpha: number;
     decay: number;
     rotation: number;
+    rotationSpeed: number; // rad/sec
     gravity: number;
-    friction: number;
+    friction: number; // per second factor
+    driftPhase: number;
+    driftSpeed: number; // rad/sec
     constructor(x: number, y: number, angle: number, color: string) {
       this.x = x;
       this.y = y;
-      const speed = Math.random() * 3 + 1.2; // slower initial speed
+      const speed = 80 + Math.random() * 180; // 80~260 px/sec
       this.vx = Math.cos(angle) * speed;
       this.vy = Math.sin(angle) * speed;
       this.color = color;
       this.alpha = 1;
-      this.decay = Math.random() * 0.012 + 0.008;
-      this.rotation = angle; // static rotation for heart orientation
-      this.gravity = 0.05; // gentle gravity
-      this.friction = 0.985; // slight air resistance
+      this.decay = Math.random() * 0.25 + 0.35; // alpha per second
+      this.rotation = angle;
+      this.rotationSpeed = (Math.random() - 0.5) * 0.6; // slight spin
+      this.gravity = 320; // px/sec^2 downward
+      this.friction = 0.9; // per second damping
+      this.driftPhase = Math.random() * Math.PI * 2;
+      this.driftSpeed = 1.5 + Math.random() * 1.0; // rad/sec
     }
-    update() {
-      this.vx *= this.friction;
-      this.vy = this.vy * this.friction + this.gravity;
-      this.x += this.vx;
-      this.y += this.vy;
-      this.alpha -= this.decay;
+    update(dt: number) {
+      // smooth lateral drift (wind-like)
+      this.driftPhase += this.driftSpeed * dt;
+      const wind = Math.sin(this.driftPhase) * 20; // px/sec^2
+      this.vx += wind * dt;
+
+      // friction per second -> convert to per-dt
+      const frictionFactor = Math.pow(this.friction, dt);
+      this.vx *= frictionFactor;
+      this.vy = this.vy * frictionFactor + this.gravity * dt;
+
+      // clamp max speed to avoid erratic jumps
+      const maxSpeed = 500; // px/sec
+      const spd = Math.hypot(this.vx, this.vy);
+      if (spd > maxSpeed) {
+        const k = maxSpeed / spd;
+        this.vx *= k;
+        this.vy *= k;
+      }
+
+      this.x += this.vx * dt;
+      this.y += this.vy * dt;
+      this.rotation += this.rotationSpeed * dt;
+      this.alpha -= this.decay * dt;
     }
     drawHeart(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
       ctx.beginPath();
@@ -99,19 +124,25 @@ const FinalCelebration: React.FC = () => {
     };
 
     let rafId = 0;
-    const animate = () => {
+    const animate = (ts: number) => {
       rafId = window.requestAnimationFrame(animate);
+      let dt = 0.016;
+      if (lastTimeRef.current != null) {
+        dt = Math.min(0.033, Math.max(0.008, (ts - lastTimeRef.current) / 1000));
+      }
+      lastTimeRef.current = ts;
+
       // clear frame
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       // draw/update particles
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
-        p.update();
+        p.update(dt);
         p.draw(ctx);
         if (p.alpha <= 0) particles.splice(i, 1);
       }
     };
-    animate();
+    animate(performance.now());
 
     const intervalId = window.setInterval(() => {
       const x = Math.random() * canvas.width;
