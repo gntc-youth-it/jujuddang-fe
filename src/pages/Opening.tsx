@@ -25,7 +25,7 @@ const Opening: React.FC = () => {
   const siteLabelMap: Record<string, string> = {
     OPENING: '오프닝장소',
     BAPTISTRY: '침례장',
-    FIELD: '대운동장',
+    FIELD: '대운동장 옆 화장실 앞',
     MAIN_3F: '본관 3층 숙소',
     MAIN_4F: '본관 4층 숙소',
     BETHLEHEM: '베들레헴 성전',
